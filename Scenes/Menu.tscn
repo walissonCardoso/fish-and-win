@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/Menu.gd" type="Script" id=1]
+
+[node name="Menu" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="fishing" type="Button" parent="."]
+margin_left = 240.0
+margin_top = 144.0
+margin_right = 363.0
+margin_bottom = 164.0
+rect_scale = Vector2( 2, 2 )
+text = "Fishing          (1p)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="competition" type="Button" parent="."]
+margin_left = 240.0
+margin_top = 272.0
+margin_right = 363.0
+margin_bottom = 296.0
+rect_scale = Vector2( 2, 2 )
+text = "Competition  (2p)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_left = 12.0
+margin_top = 400.0
+margin_right = 76.0
+margin_bottom = 448.0
+text = "Credits:
+
+BenSound"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="fishing" to="." method="_on_fishing_pressed"]

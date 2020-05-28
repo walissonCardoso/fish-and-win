@@ -1,0 +1,288 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/TileMap.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/collisionFishing.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/FishSchool.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scripts/FishingGame.gd" type="Script" id=5]
+[ext_resource path="res://Art/fishin.png" type="Texture" id=6]
+[ext_resource path="res://Sound/bensound-thelounge.ogg" type="AudioStream" id=7]
+[ext_resource path="res://Art/mouse.png" type="Texture" id=8]
+[ext_resource path="res://Art/arrows.png" type="Texture" id=9]
+[ext_resource path="res://Art/down.png" type="Texture" id=10]
+
+[sub_resource type="Animation" id=1]
+resource_name = "grow"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.2, 1.2 ), Vector2( 1, 1 ) ]
+}
+
+[node name="FishingGame" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="water" type="ColorRect" parent="."]
+margin_left = -192.0
+margin_top = -358.0
+margin_right = 1168.0
+margin_bottom = 930.0
+color = Color( 0.14902, 0.611765, 0.792157, 0.729412 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sand" type="ColorRect" parent="."]
+margin_left = -512.0
+margin_top = -360.0
+margin_right = -192.0
+margin_bottom = 928.0
+color = Color( 0.945098, 0.917647, 0.756863, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FishSchool" parent="." instance=ExtResource( 4 )]
+
+[node name="TileMap" parent="." instance=ExtResource( 2 )]
+tile_data = PoolIntArray( -327683, 8, 0, -262147, 8, 0, -327667, 1610612736, 0, -327666, 1610612738, 0, -327665, 1610612740, 0, -196611, 8, 0, -262143, 1610612741, 0, -262139, 1610612741, 0, -262138, 1610612740, 0, -262137, 1610612741, 0, -262132, 1610612739, 0, -262131, 1610612737, 0, -262130, 1610612741, 0, -262129, 1610612737, 0, -131076, 1073741831, 0, -131075, 8, 0, -131074, 1610612736, 0, -131073, 1610612739, 0, -196608, 1610612740, 0, -196607, 1610612741, 0, -196606, 1610612738, 0, -196605, 1610612737, 0, -196604, 1610612736, 0, -196603, 1610612738, 0, -196602, 1610612739, 0, -196601, 1610612736, 0, -196600, 1610612737, 0, -196599, 1610612739, 0, -196598, 1610612736, 0, -196597, 1610612738, 0, -196596, 1610612737, 0, -196595, 1610612736, 0, -196594, 1610612740, 0, -196593, 1610612736, 0, -65540, 1073741830, 0, -65539, 1073741832, 0, -131067, 1610612747, 0, -131066, -1073741813, 0, -131062, -1610612725, 0, -131061, 11, 0, -131060, 11, 0, -131059, 1610612737, 0, -131058, 1610612740, 0, -4, 1073741831, 0, -3, 8, 0, -65535, -1610612725, 0, -65531, 10, 0, -65524, -1610612725, 0, -65523, 1610612738, 0, 65532, 6, 0, 65533, 1073741832, 0, 13, 1610612737, 0, 14, 1610612741, 0, 131068, 1073741830, 0, 131069, 8, 0, 65548, 10, 0, 65549, 1610612736, 0, 65550, 1610612740, 0, 196604, 1073741831, 0, 196605, 1073741832, 0, 131073, 10, 0, 131082, -1610612725, 0, 131085, 1610612738, 0, 131086, 1610612741, 0, 262140, 6, 0, 262141, 8, 0, 196611, -1610612725, 0, 196621, 1610612737, 0, 327676, 1073741831, 0, 327677, 1073741832, 0, 262157, 1610612738, 0, 262158, 1610612737, 0, 393212, 1073741830, 0, 393213, 8, 0, 327690, -1610612725, 0, 327693, 1610612736, 0, 327694, 1610612739, 0, 458748, 1073741831, 0, 458749, 1073741832, 0, 393217, 1610612747, 0, 393222, -1073741814, 0, 393226, -1073741814, 0, 393229, 1610612739, 0, 393230, 1610612740, 0, 524284, 6, 0, 524285, 8, 0, 458765, 1610612741, 0, 589820, 1073741831, 0, 589821, 1073741832, 0, 524301, 1610612740, 0, 655356, 1073741830, 0, 655357, 8, 0, 589825, 10, 0, 589828, 1610612747, 0, 589836, 1610612747, 0, 589837, 1610612736, 0, 720892, 1073741831, 0, 720893, 1073741832, 0, 720894, 1610612736, 0, 720895, 1610612738, 0, 655360, 1610612739, 0, 655361, 1610612737, 0, 655362, 1610612740, 0, 655363, 1610612741, 0, 655364, 1610612738, 0, 655365, 1610612739, 0, 655366, 1610612737, 0, 655367, 1610612738, 0, 655368, 1610612739, 0, 655369, 1610612736, 0, 655370, 1610612738, 0, 655371, 1610612737, 0, 655372, 1610612736, 0, 655373, 1610612739, 0, 655374, 1610612740, 0, 786429, 8, 0, 786431, 1610612740, 0, 720898, 1610612741, 0, 720899, 1610612740, 0, 720904, 1610612741, 0, 720909, 1610612740, 0, 720910, 1610612741, 0, 851965, 8, 0, 917501, 8, 0 )
+
+[node name="Collision" parent="." instance=ExtResource( 3 )]
+collision/safe_margin = 0.001
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 10, 240 )
+
+[node name="HUD" type="Node2D" parent="."]
+z_index = 1
+
+[node name="scorer" type="ColorRect" parent="HUD"]
+visible = false
+margin_right = 56.0
+margin_bottom = 24.0
+color = Color( 0.584314, 0.392157, 0.729412, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="number" type="Label" parent="HUD/scorer"]
+margin_left = 32.0
+margin_top = 2.0
+margin_right = 72.0
+margin_bottom = 33.0
+rect_scale = Vector2( 1.5, 1.5 )
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="littleFish" type="Sprite" parent="HUD/scorer"]
+position = Vector2( 14, 12 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 6 )
+__meta__ = {
+"_editor_description_": "	"
+}
+
+[node name="scoreVisible" type="Timer" parent="HUD/scorer"]
+wait_time = 2.0
+one_shot = true
+
+[node name="timer" type="Label" parent="HUD"]
+margin_right = 28.0
+margin_bottom = 14.0
+rect_scale = Vector2( 1.0893, 1.0893 )
+rect_pivot_offset = Vector2( 14, 7 )
+text = "0:00"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="growAnim" type="AnimationPlayer" parent="HUD/timer"]
+anims/grow = SubResource( 1 )
+
+[node name="pauseMenu" type="Panel" parent="HUD"]
+pause_mode = 2
+visible = false
+modulate = Color( 1, 1, 1, 0.643137 )
+show_behind_parent = true
+margin_right = 128.0
+margin_bottom = 176.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="continue" type="Button" parent="HUD/pauseMenu"]
+pause_mode = 2
+margin_left = 22.0
+margin_top = 86.0
+margin_right = 106.0
+margin_bottom = 110.0
+text = "Continue"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="menu" type="Button" parent="HUD/pauseMenu"]
+margin_left = 22.0
+margin_top = 124.0
+margin_right = 106.0
+margin_bottom = 148.0
+text = "Menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="paused" type="Label" parent="HUD/pauseMenu"]
+margin_left = 39.0
+margin_top = 36.0
+margin_right = 89.0
+margin_bottom = 50.0
+text = "Paused!"
+
+[node name="tutorial" type="Panel" parent="HUD"]
+pause_mode = 2
+modulate = Color( 1, 1, 1, 0.854902 )
+margin_left = 240.0
+margin_top = 120.0
+margin_right = 480.0
+margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="explanation" type="Label" parent="HUD/tutorial"]
+margin_left = 36.0
+margin_top = 12.0
+margin_right = 204.0
+margin_bottom = 94.0
+text = "You are on vacations!
+
+You went fishing and
+you don't plan to go home
+until you get 20 fish"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ok" type="Button" parent="HUD/tutorial"]
+margin_left = 105.0
+margin_top = 210.0
+margin_right = 135.0
+margin_bottom = 230.0
+text = "Ok"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="leftClick" type="Label" parent="HUD/tutorial"]
+margin_left = 120.0
+margin_top = 120.0
+margin_right = 193.0
+margin_bottom = 134.0
+text = "bait placing"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="leftClick2" type="Sprite" parent="HUD/tutorial"]
+position = Vector2( 87, 124 )
+texture = ExtResource( 8 )
+
+[node name="pullFish" type="Label" parent="HUD/tutorial"]
+margin_left = 120.0
+margin_top = 150.0
+margin_right = 193.0
+margin_bottom = 164.0
+text = "pull fish"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="pullFish2" type="Sprite" parent="HUD/tutorial"]
+position = Vector2( 86, 154 )
+texture = ExtResource( 10 )
+
+[node name="rowing" type="Label" parent="HUD/tutorial"]
+margin_left = 120.0
+margin_top = 180.0
+margin_right = 193.0
+margin_bottom = 194.0
+text = "move boat"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="arrows" type="Sprite" parent="HUD/tutorial"]
+position = Vector2( 86, 188 )
+texture = ExtResource( 9 )
+
+[node name="gameOver" type="Panel" parent="HUD"]
+pause_mode = 2
+visible = false
+modulate = Color( 1, 1, 1, 0.854902 )
+margin_left = 240.0
+margin_top = 120.0
+margin_right = 480.0
+margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="explanation" type="Label" parent="HUD/gameOver"]
+margin_left = 36.0
+margin_top = 12.0
+margin_right = 204.0
+margin_bottom = 94.0
+text = "Nice!!!
+
+This is gonna
+feed me for a week!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ok" type="Button" parent="HUD/gameOver"]
+margin_left = 105.0
+margin_top = 210.0
+margin_right = 135.0
+margin_bottom = 230.0
+text = "Ok"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="time" type="Label" parent="HUD/gameOver"]
+margin_left = 82.0
+margin_top = 120.0
+margin_right = 158.0
+margin_bottom = 134.0
+text = "Time: 00:00"
+align = 1
+
+[node name="result" type="Label" parent="HUD/gameOver"]
+margin_top = 148.0
+margin_right = 240.0
+margin_bottom = 162.0
+text = "Result: fishing master"
+align = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 7 )
+autoplay = true
+[connection signal="timeout" from="HUD/scorer/scoreVisible" to="." method="_on_scoreVisible_timeout"]
+[connection signal="pressed" from="HUD/pauseMenu/continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="HUD/pauseMenu/menu" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="HUD/tutorial/ok" to="." method="_on_tutorial_ok_pressed"]
+[connection signal="pressed" from="HUD/gameOver/ok" to="." method="_on_gameover_ok_pressed"]
