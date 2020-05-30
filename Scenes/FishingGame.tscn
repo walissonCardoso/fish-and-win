@@ -281,6 +281,10 @@ align = 1
 pause_mode = 2
 stream = ExtResource( 7 )
 autoplay = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 10, 240 )
+current = true
 [connection signal="timeout" from="HUD/scorer/scoreVisible" to="." method="_on_scoreVisible_timeout"]
 [connection signal="pressed" from="HUD/pauseMenu/continue" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="HUD/pauseMenu/menu" to="." method="_on_menu_pressed"]

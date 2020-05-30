@@ -25,28 +25,42 @@ var waiting_time = 1
 # Position of the bait in the water
 var bait = Vector2.ZERO
 
+# Options: "competition" mode and "fisher" mode
+var mode = "fisher"
+var player_number = 1
+var ignore_input = false
+
 func _ready():
 	bait = position
 
 func _input(_event):
-	if Input.is_action_just_pressed("place_bait"):
+	if ignore_input:
+		return
+	
+	if Input.is_action_just_pressed("place_bait") and mode == "fisher":
 		positionate_bait()
-	elif Input.is_action_just_pressed("ui_down") and $standing.visible:
+	elif Input.is_action_just_pressed("ui_down") and $standing.visible and mode == "fisher":
 		try_to_fish()
 	else:
 		# Read user input and update speed
 		# No impulsion a priori
 		var impulsion = Vector2.ZERO
 		
+		var left = Input.is_action_just_pressed("ui_left")
+		var right = Input.is_action_just_pressed("ui_right")
+		if player_number == 2:
+			left = Input.is_action_just_pressed("ui_left2")
+			right = Input.is_action_just_pressed("ui_right2")
+		
 		# If left arm is available, push with it.
-		if Input.is_action_just_pressed("ui_left") and $leftRow.time_left <= 0:
+		if left and $leftRow.time_left <= 0:
 			turn -= 1
 			impulsion += transform.x * impulse
 			# Time to use left arm again
 			$leftRow.start(waiting_time)
 			
 		# If right arm is available, push with it
-		if Input.is_action_just_pressed("ui_right") and $rightRow.time_left <= 0:
+		if right and $rightRow.time_left <= 0:
 			turn += 1
 			impulsion += transform.x * impulse
 			# Time to use right arm again
@@ -58,7 +72,7 @@ func _input(_event):
 		
 		# If player is pushing with both arms and did not realease buttons, add an
 		# extra small speed. This simulates extra effort being put on the pushing
-		if Input.is_action_pressed("ui_left") and Input.is_action_pressed("ui_right")\
+		if left and right\
 		and $leftRow.time_left > 0 and $rightRow.time_left > 0:
 			# Small extra force
 			impulsion += transform.x * 2
@@ -121,12 +135,14 @@ func set_sprite(sprite_name):
 
 func positionate_bait():
 	bait = get_global_mouse_position()
+	set_sprite("standing")
+	# This second placement fixes a small bug (positioning before rotation)
+	bait = get_global_mouse_position()
 	var reference = $standing/fishingRod.global_position
 	var distance = bait.distance_to(reference)
 	if distance > fishable_distance:
 		var factor = fishable_distance / distance
 		bait = reference + (bait-reference) * factor
-	set_sprite("standing")
 
 func try_to_fish():
 	# Get all elements under the bait
@@ -155,4 +171,17 @@ func global_to_local(coord):
 	# rotation
 	return (coord - position).rotated(-rotation)
 
-
+func set_competition_mode(player):
+	# Set sprite, but don't play
+	$rowing.visible = true
+	$standing.visible = false
+	$bait.visible = false
+	$rowing.frame = 0
+	# Reduces stearing
+	front_space = 70
+	if player == 2:
+		$rowing.modulate = Color(0.7, 0.5, 0.6)
+	# Assim mode and player number
+	mode = "competition"
+	player_number = player
+	ignore_input = true

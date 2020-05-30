@@ -1,5 +1,6 @@
 extends Node2D
 
+onready var screen_size = get_viewport().get_visible_rect().size
 # Number the player has to achieve in order to win
 export (int) var fish_to_win = 20
 # Fish currently caught by the player
@@ -24,7 +25,9 @@ func _process(delta):
 	var time_str = str(int(elipsed_time / 60)) + ":" + str(int(elipsed_time) % 60).pad_zeros(2)
 	$HUD/timer.set_text(time_str)
 	# The timer follows the player
-	$HUD/timer.rect_position = $Player.position - Vector2(14, 200)
+	$HUD/timer.rect_position = $Player.position - Vector2(14, screen_size.y * 0.4)
+	# As well as the camera
+	$Camera2D.position = $Player.position
 
 func inc_fish(position):
 	# Save capture
@@ -46,11 +49,8 @@ func inc_fish(position):
 	if caught_fish >= fish_to_win:
 		game_over()
 
-func _on_scoreVisible_timeout():
-	# Set scorer back to invisible
-	$HUD/scorer.visible = false
-
 func game_over():
+	# Display resutl according to time taken by the player
 	$HUD/gameOver.rect_position = $Player.position - Vector2(120, 120)
 	if elipsed_time < 30:
 		$HUD/gameOver/result.set_text("Result: fishing god")
@@ -63,25 +63,37 @@ func game_over():
 	else:
 		$HUD/gameOver/result.set_text("Result: need to improve")
 	
+	# Display time and pause everything else.
+	# Game over menu won't pause
 	var time_str = str(int(elipsed_time / 60)) + ":" + str(int(elipsed_time) % 60).pad_zeros(2)
 	$HUD/gameOver/time.set_text('Time: ' + time_str)
 	$HUD/gameOver.show()
 	get_tree().paused = true
 
+# Signal functions
+
+func _on_scoreVisible_timeout():
+	# Set scorer back to invisible
+	$HUD/scorer.visible = false
 
 func _on_continue_pressed():
+	# Player pressed continue on pause menu
 	get_tree().paused = false
 	$HUD/pauseMenu.hide()
 
-
 func _on_menu_pressed():
+	# Player pressed "menu" on pause menu
 	get_tree().paused = false
+	# warning-ignore:return_value_discarded
 	get_tree().change_scene("res://Scenes/Menu.tscn")
 
 func _on_tutorial_ok_pressed():
+	# Player pressed ok on tutorial menu
 	get_tree().paused = false
 	$HUD/tutorial.hide()
 
 func _on_gameover_ok_pressed():
+	# Player pressed ok on game over menu
 	get_tree().paused = false
+	# warning-ignore:return_value_discarded
 	get_tree().change_scene("res://Scenes/Menu.tscn")

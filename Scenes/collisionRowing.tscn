@@ -1,0 +1,18 @@
+[gd_scene format=2]
+
+[node name="CollisionRowing" type="KinematicBody2D"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( 1677.2, 54.5265 )
+scale = Vector2( 4.11979, 0.359513 )
+polygon = PoolVector2Array( 1224.04, -151.668, 1224.04, 560.407, -407.108, 560.407, -407.108, -151.668, 1239.58, -151.668, 1239.58, -307.434, -420.701, -307.434, -420.701, 738.425, 1239.58, 738.425, 1239.58, -151.668 )
+
+[node name="water" type="ColorRect" parent="."]
+margin_left = -240.0
+margin_top = -136.0
+margin_right = 7072.0
+margin_bottom = 360.0
+color = Color( 0.192157, 0.72549, 0.827451, 0.752941 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

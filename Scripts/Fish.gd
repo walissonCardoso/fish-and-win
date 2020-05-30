@@ -1,22 +1,22 @@
 extends Area2D
 
+# get the size of the screen
+onready var screen_size = get_viewport().get_visible_rect().size
+# Amount of air the fish has. If zero, forces the fish to go to the surface
+onready var air = randf()
+
 # Max velocity on x and y
 var MAX_VELOCITY = 20
 # Although the game is 2D, we will simulate z axis
 var velocity = Vector3.ZERO
 var location = Vector3.ZERO
-# Amount of air the fish has. If zero, forces the fish to go to the surface
-var air = 1
-var breathing_factor = 0.01
+var breathing_factor = 0.005
 # Best position on PSO algorithm
 var best_position = Vector3.ZERO
-var screen_size = Vector2.ZERO
 # Controls if this fish was never caught
 var its_alive = true
 
 func _ready():
-	# Get the size of the screen
-	screen_size = get_viewport().get_visible_rect().size
 	# Random locations on x and y
 	position.x = rand_range(0, screen_size.x)
 	position.y = rand_range(0, screen_size.y)
@@ -41,23 +41,23 @@ func _process(delta):
 		# Fish is under water
 		air -= delta * breathing_factor
 
-func update_velocity(best_global_position, gamma, phi1, phi2):
-	# PSO formula for updating speed
-	velocity = gamma * velocity +\
-			   phi1 * randf() * (best_position - location) + \
-			   phi2 * randf() * (best_global_position - location)
+func update_velocity(best_global_position):
+	var distance = to_zero_one(best_global_position - location)
+	
+	velocity = 0.9 * velocity +\
+			   0.3 * distance * MAX_VELOCITY +\
+			   0.01 * Vector3(randf(), randf(), randf()) * MAX_VELOCITY
 	
 	# Forces fish to go up
 	if air <= 0.05:
-		velocity[2] = 0.1
+		velocity[2] = 0.05
 	
 	# Limit speed on all axis
 	velocity[0] = clamp(velocity[0], -MAX_VELOCITY, MAX_VELOCITY)
 	velocity[1] = clamp(velocity[1], -MAX_VELOCITY, MAX_VELOCITY)
-	velocity[2] = clamp(velocity[2], -0.1, 0.1)
+	velocity[2] = clamp(velocity[2], -0.05, 0.05)
 	
 	update_fish_sprite()
-
 
 func update_position(delta):
 	# Just update according to our location variable
@@ -85,6 +85,11 @@ func check_margin():
 	if location[2] <= 0 and velocity[2] < 0 or\
 	   location[2] >= 1 and velocity[2] > 0:
 			velocity[2] = 0
+
+func to_zero_one(position):
+	return Vector3(position[0] / screen_size.x,
+				   position[1] / screen_size.y,
+				   position[2])
 
 func was_caught():
 	if its_alive and modulate.a > 0.05:

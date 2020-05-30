@@ -17,12 +17,7 @@ var fish_list = []
 # List of food 3d-position in the space and their quantity.
 var food_position = []
 var food_quantity = []
-var food_decay_factor = 0.01
-
-# Variables for Particle Swarm Optimization algorithm
-var gamma = 0.9
-var phi1 = 0.6
-var phi2 = 0.4
+var food_decay_factor = 0.02
 
 func _ready():
 	# Get the size of the screen
@@ -36,11 +31,12 @@ func _ready():
 	for fish in fish_list:
 		self.add_child(fish)
 	
-	# Add 10 food sources
-	for i in range(10):
+	# Add n_fish food sources
+	for i in range(n_fish):
 		food(i)
 
 func _process(delta):
+	update()
 	# Reduce food amount
 	food_decay(delta)
 	
@@ -56,49 +52,11 @@ func _process(delta):
 		return
 	
 	# Update fish velocity
-	fish_list[i].update_velocity(get_best_global(i), gamma, phi1, phi2)
-	
-	# Check if the new location of the fish is better than its old best
-	# found. This information is basically the same for each fish, since the
-	# evaluation won't change
-	if evaluate(fish_list[i].best_position) > evaluate(fish_list[i].location):
-		fish_list[i].best_position = copy3(fish_list[i].location)
-
-func evaluate(eval_position):
-	# The evaluation is the distances multiplied by the food quantities.
-	# This could be anything, just tried to get something to work
-	var normal_position = to_zero_one(eval_position)
-	var penality = 0
-	for i in range(len(food_position)):
-		var distance = normal_position.distance_to(to_zero_one(food_position[i]))
-		penality += distance * food_quantity[i]
-	
-	var last_capture = Vector2.ZERO
-	if get_parent().get_name() == "FishingGame":
-		last_capture = get_parent().capture_position
-	if last_capture != Vector2.ZERO:
-		var distance = copy2(eval_position).distance_to(last_capture)
-		if distance < 200:
-			penality += pow(2-distance/200, 2)
-	return penality
+	fish_list[i].update_velocity(get_best_global(i))
 
 func get_best_global(i):
-	# The best global is global for a set of fishes. The best global for the
-	# first part is the first food, source, the second and so on.
-	var index = i % len(food_position)
-	return copy3(food_position[index])
-
-func copy2(vector):
-	return Vector2(vector[0], vector[1])
-	
-func copy3(vector):
-	# Make a copy by value of a 3-dimentional vector
-	return Vector3.ZERO + vector
-
-func to_zero_one(position):
-	return Vector3(position[0] / screen_size[0],
-				   position[1] / screen_size[1],
-				   position[2])
+	# The best global is a food source
+	return copy3(food_position[i])
 
 func food_decay(delta):
 	# Make the food quantity reduce and deposit on the bottom of the lake
@@ -113,28 +71,36 @@ func food_decay(delta):
 			food(i)
 
 func food(i):
+	# Tries to make fish go up during gameplay according
+	# to a quadratic distribution
+	var progress = 1 - float(n_fish) / initial_n_fish
+	var max_depth = pow(progress, 2)
 	# Place food on random location. Index "i" refers to the food source number
-	var food_pos = Vector3(rand_range(0, screen_size[0]),
-						   rand_range(0, screen_size[1]),
-						   rand_range(0.0, 1.0))
+	var food_pos = Vector3(rand_range(0, screen_size.x),
+						   rand_range(0, screen_size.y),
+						   rand_range(max_depth, max_depth+0.5))
 	# If the array is still being create, append
 	if len(food_position) <= i:
 		food_position.append(food_pos)
 		food_quantity.append(rand_range(0, 1))
 	# If not, change in the position
 	else:
-		# Tries to make fish go up during gameplay according
-		# to a quadratic distribution
-		var max_depth = pow(1 - n_fish / initial_n_fish, 2)
 		food_position[i] = copy3(food_pos)
-		food_quantity[i] = rand_range(max_depth, 1)
+		food_quantity[i] = rand_range(0, 1)
 
 func _on_foodDeposity_timeout():
 	# Every five seconds, change randomly a food source 
 	var i = randi() % len(food_position)
 	food(i)
 
+func copy2(vector):
+	return Vector2(vector[0], vector[1])
+	
+func copy3(vector):
+	# Make a copy by value of a 3-dimentional vector
+	return Vector3.ZERO + vector
+
 # Uncomment below to see food sources and add "update()" to _process()
-#func _draw():
-#	for pos in food_position:
-#		draw_circle(Vector2(pos[0], pos[1]), 3, Color(1,0,0))
+func _draw():
+	for pos in food_position:
+		draw_circle(Vector2(pos[0], pos[1]), 3, Color(1,0,0))
