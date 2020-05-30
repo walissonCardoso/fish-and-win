@@ -36,7 +36,8 @@ func _ready():
 		food(i)
 
 func _process(delta):
-	update()
+	#update()
+	
 	# Reduce food amount
 	food_decay(delta)
 	
@@ -101,6 +102,6 @@ func copy3(vector):
 	return Vector3.ZERO + vector
 
 # Uncomment below to see food sources and add "update()" to _process()
-func _draw():
-	for pos in food_position:
-		draw_circle(Vector2(pos[0], pos[1]), 3, Color(1,0,0))
+#func _draw():
+#	for pos in food_position:
+#		draw_circle(Vector2(pos[0], pos[1]), 3, Color(1,0,0))

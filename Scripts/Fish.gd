@@ -10,7 +10,7 @@ var MAX_VELOCITY = 20
 # Although the game is 2D, we will simulate z axis
 var velocity = Vector3.ZERO
 var location = Vector3.ZERO
-var breathing_factor = 0.005
+var breathing_factor = 0.006
 # Best position on PSO algorithm
 var best_position = Vector3.ZERO
 # Controls if this fish was never caught

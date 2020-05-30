@@ -101,10 +101,6 @@ func game_over(winner):
 	var winner_str = 'Player ' + str(winner)
 	var panel_size = $singleScreen/Viewport/gameOver.rect_size.x
 	
-	# x coordinate of the players
-	var x1 = $singleScreen/Viewport/raceTrack/Player1.position.x
-	var x2 = $singleScreen/Viewport/raceTrack/Player2.position.x
-	
 	# gameOver panel appears in the center of the main camera
 	$singleScreen/Viewport/gameOver.rect_position.x = main_camera.position.x - panel_size / 2
 	

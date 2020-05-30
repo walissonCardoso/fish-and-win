@@ -52,16 +52,19 @@ func inc_fish(position):
 func game_over():
 	# Display resutl according to time taken by the player
 	$HUD/gameOver.rect_position = $Player.position - Vector2(120, 120)
-	if elipsed_time < 30:
+	if elipsed_time < 80:
+		# I don't know if it's actually possible to reach fishing god
 		$HUD/gameOver/result.set_text("Result: fishing god")
-	elif elipsed_time < 60:
+	elif elipsed_time < 105:
 		$HUD/gameOver/result.set_text("Result: fishing master")
-	elif elipsed_time < 120:
+	elif elipsed_time < 125:
 		$HUD/gameOver/result.set_text("Result: fishing pro")
 	elif elipsed_time < 180:
 		$HUD/gameOver/result.set_text("Result: good fisherman")
-	else:
+	elif elipsed_time < 260:
 		$HUD/gameOver/result.set_text("Result: need to improve")
+	else:
+		$HUD/gameOver/result.set_text("Result: rookie")
 	
 	# Display time and pause everything else.
 	# Game over menu won't pause

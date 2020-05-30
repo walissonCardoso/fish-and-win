@@ -39,15 +39,24 @@ func _input(_event):
 	
 	if Input.is_action_just_pressed("place_bait") and mode == "fisher":
 		positionate_bait()
-	elif Input.is_action_just_pressed("ui_down") and $standing.visible and mode == "fisher":
+	elif ((Input.is_action_just_pressed("ui_down") and $standing.visible and mode == "fisher")) or\
+		 ((Input.is_action_just_pressed("ui_down2") and $standing.visible and mode == "fisher")):
 		try_to_fish()
 	else:
 		# Read user input and update speed
 		# No impulsion a priori
 		var impulsion = Vector2.ZERO
 		
-		var left = Input.is_action_just_pressed("ui_left")
-		var right = Input.is_action_just_pressed("ui_right")
+		# Check right and left commands.
+		var left = false
+		var right = false
+		if player_number == 1:
+			left = Input.is_action_just_pressed("ui_left")
+			right = Input.is_action_just_pressed("ui_right")
+			# If mode is 'fisher' we allow control on both parts of the keyboard
+			if mode == 'fisher':
+				left = left or Input.is_action_just_pressed("ui_left2")
+				right = right or Input.is_action_just_pressed("ui_right2")
 		if player_number == 2:
 			left = Input.is_action_just_pressed("ui_left2")
 			right = Input.is_action_just_pressed("ui_right2")
@@ -179,6 +188,7 @@ func set_competition_mode(player):
 	$rowing.frame = 0
 	# Reduces stearing
 	front_space = 70
+	steering_angle = 0.26 # 15º
 	if player == 2:
 		$rowing.modulate = Color(0.7, 0.5, 0.6)
 	# Assim mode and player number
